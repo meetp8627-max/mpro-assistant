@@ -1,9 +1,7 @@
 name: Build MPro APK
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:   # allows manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -22,19 +20,34 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            git zip unzip openjdk-17-jdk \
-            build-essential libffi-dev \
-            libssl-dev autoconf libtool \
-            libltdl-dev libgdbm-dev \
-            python3-pip zlib1g-dev
-          pip install buildozer cython
+            git zip unzip openjdk-17-jdk python3-pip \
+            autoconf libtool pkg-config zlib1g-dev \
+            libncurses5-dev libncursesw5-dev libtinfo5 \
+            cmake libffi-dev libssl-dev build-essential \
+            ccache
+
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.33
+
+      - name: Set up Android SDK & NDK cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer/android/platform/android-sdk
+            ~/.buildozer/android/platform/android-ndk-r25b
+          key: android-sdk-ndk-${{ runner.os }}-v2
 
       - name: Build APK with Buildozer
         run: |
-          buildozer -v android debug
+          yes | buildozer android debug 2>&1
+        env:
+          ANDROIDAPI: "33"
+          ANDROIDMINAPI: "21"
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MPro-APK
+          name: mpro-debug-apk
           path: bin/*.apk
+          if-no-files-found: error
+          
