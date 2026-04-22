@@ -38,7 +38,7 @@ def get_memory_local():
 
 # ================= CONFIG =================
 
-API_KEY = "your_key"
+API_KEY = "AIzaSyA1LZ62408EQv54cQki_gTC5wMGEu2MHjw"
 
 WS_URL = (
     "wss://generativelanguage.googleapis.com/ws/"
