@@ -7,7 +7,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.0
 
 # ← FIXED: only libs that work on Android
-requirements = python3==3.10.14,kivy==2.3.0,websockets,numpy,certifi
+requirements = python3,kivy,websockets,numpy,certifi
 
 orientation = portrait
 fullscreen = 0
