@@ -4,7 +4,7 @@ workflows:
     # Codemagic ka standard Linux server use karenge
     instance_type: linux
     environment:
-      python: 3.10
+      python: 3.14
     scripts:
       - name: Install system dependencies for Buildozer
         script: |
