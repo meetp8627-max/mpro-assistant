@@ -2,7 +2,7 @@ workflows:
   build-python-app:
     name: Buildozer Android APK
     # Codemagic ka standard Linux server use karenge
-    instance_type: linux_x21
+    instance_type: linux
     environment:
       python: 3.10
     scripts:
