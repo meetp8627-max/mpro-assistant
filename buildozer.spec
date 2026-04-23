@@ -2,7 +2,7 @@
 title = MPro
 package.name = mpro
 package.domain = org.mpro
-source.dir = .
+source.dir =.
 source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.0
 
