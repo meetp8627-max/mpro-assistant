@@ -11,43 +11,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            git zip unzip openjdk-17-jdk python3-pip \
-            autoconf libtool pkg-config zlib1g-dev \
-            libncurses5-dev libncursesw5-dev libtinfo5 \
-            cmake libffi-dev libssl-dev build-essential \
-            ccache
-
-          pip install --upgrade pip
-          pip install buildozer cython==0.29.33
-
-      - name: Set up Android SDK & NDK cache
+      - name: Cache Buildozer global directory
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.buildozer/android/platform/android-sdk
-            ~/.buildozer/android/platform/android-ndk-r25b
-          key: android-sdk-ndk-${{ runner.os }}-v2
+          path: .buildozer_cache
+          key: buildozer-cache-${{ hashFiles('buildozer.spec') }}
+          restore-keys: buildozer-cache-
 
-      - name: Build APK with Buildozer
-        run: |
-          yes | buildozer android debug 2>&1
-        env:
-          ANDROIDAPI: "33"
-          ANDROIDMINAPI: "21"
+      - name: Build APK with Buildozer Docker
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: android debug
+          workdir: .
+          buildozer_version: stable
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: mpro-debug-apk
-          path: bin/*.apk
+          path: ${{ steps.buildozer.outputs.filename }}
           if-no-files-found: error
           
