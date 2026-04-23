@@ -34,7 +34,11 @@ if platform == 'android':
     request_permissions([Permission.INTERNET, Permission.RECORD_AUDIO])
 
 # ================= CONFIG & MEMORY =================
-API_KEY = "AIzaSyA1LZ62408EQv54cQki_gTC5wMGEu2MHjw" # 🚨 APNI GEMINI API KEY YAHAN DALNA 🚨
+
+# 🚨🚨🚨 APNI GEMINI API KEY YAHAN DALO 🚨🚨🚨
+API_KEY = "AIzaSyA1LZ62408EQv54cQki_gTC5wMGEu2MHjw" 
+# 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
 WS_URL = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent"
 MEMORY_FILE = "mpro_memory.json"
 
@@ -59,7 +63,7 @@ def frame(obj):
 # ── Force dark background immediately ──────────────────────────────────────
 Window.clearcolor = (0.035, 0.039, 0.055, 1)
 
-# ── Status cycle for demo ────────────────
+# ── Status cycle ────────────────
 STATUS_IDLE      = "idle"
 STATUS_LISTENING = "listening"
 STATUS_THINKING  = "thinking"
@@ -549,5 +553,3 @@ KV = """
                             radius: [dp(15)]
                         Color:
                             rgba: 0.0, 0.85, 1.0, 0.25
-                        Line:
-               
