@@ -1,18 +1,27 @@
 [app]
-title = MPro
-package.name = mpro
-package.domain = org.mpro
+title = MPro Assistant
+package.name = mproassistant
+package.domain = org.meetp
+
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
-version = 1.0
-requirements = python3,kivy,websockets,numpy,certifi,openssl
-orientation = portrait
-android.permissions = INTERNET, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS
+
+version = 1.0.0
+
+requirements = python3,kivy
+
+# Android config
+android.permissions = INTERNET
+android.api = 33
 android.minapi = 21
 android.ndk = 25b
 android.sdk = 33
 android.accept_sdk_license = True
-log_level = 2
+android.archs = arm64-v8a, armeabi-v7a
+
+# Python for Android
+p4a.branch = master
 
 [buildozer]
 log_level = 2
+warn_on_root = 1
