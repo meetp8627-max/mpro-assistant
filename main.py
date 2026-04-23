@@ -205,25 +205,34 @@ User Memories:
 
                             print("🛠 Tool:", name, args)
 
-                            if name == "save_memory":
+                                                        if name == "save_memory":
                                 text = args.get("memory_text", "")
                                 save_memory_local(text)
-
-                            elif name == "get_memory":
-                                memories = get_memory_local()
-
+                                
+                                # Model ko batana zaroori hai ki kaam ho gaya
                                 await ws.send(frame({
                                     "toolResponse": {
-                                        "name": "get_memory",
-                                        "response": {
-                                            "memories": memories
-                                        }
+                                        "functionResponses": [{
+                                            "name": "save_memory",
+                                            "response": {"status": "success"}
+                                        }]
                                     }
                                 }))
 
                             elif name == "open_whatsapp":
                                 print("📱 WhatsApp opening logic here")
+                                # Yahan bhi response bhejna hoga
+                                await ws.send(frame({
+                                    "toolResponse": {
+                                        "functionResponses": [{
+                                            "name": "open_whatsapp",
+                                            "response": {"status": "opened"}
+                                        }]
+                                    }
+                                }))
 
+http://googleusercontent.com/immersive_entry_chip/0
+    
                             continue
 
                         # ===== AUDIO PLAY =====
