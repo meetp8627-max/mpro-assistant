@@ -1,35 +1,69 @@
 name: Build MPro APK
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04   # ← FIXED: 20.04 not 22.04
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3   # ← FIXED: v3 avoids Node.js warning
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install ALL required system packages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            git zip unzip \
+            openjdk-11-jdk \
+            build-essential \
+            libffi-dev \
+            libssl-dev \
+            libsqlite3-dev \
+            zlib1g-dev \
+            libbz2-dev \
+            libreadline-dev \
+            autoconf \
+            automake \
+            libtool \
+            pkg-config \
+            cmake \
+            libltdl-dev \
+            libgdbm-dev \
+            python3-pip \
+            ccache
+          # Set Java 11 as default
+          sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+
+      - name: Install Python build tools
+        run: |
+          pip install --upgrade pip
+          pip install buildozer==1.5.0
+          pip install cython==0.29.37
 
       - name: Cache Buildozer global directory
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
-          path: .buildozer_cache
-          key: buildozer-cache-${{ hashFiles('buildozer.spec') }}
-          restore-keys: buildozer-cache-
+          path: ~/.buildozer
+          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          restore-keys: buildozer-${{ runner.os }}-
 
-      - name: Build APK with Buildozer Docker
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: android debug
-          workdir: .
-          buildozer_version: stable
+      - name: Build APK
+        run: |
+          buildozer -v android debug 2>&1 | tail -100
+        timeout-minutes: 60
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: mpro-debug-apk
-          path: ${{ steps.buildozer.outputs.filename }}
+          name: MPro-APK
+          path: bin/*.apk
           if-no-files-found: error
-          
